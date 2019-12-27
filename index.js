@@ -45,5 +45,6 @@ async function verifiedTIN(tax_id){
   });
 }
 
-verifiedTIN("0135556015413")
+let tax_id = ""
+verifiedTIN(tax_id)
 module.exports = verifiedTIN 
