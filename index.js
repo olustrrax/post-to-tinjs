@@ -45,6 +45,4 @@ async function verifiedTIN(tax_id){
   });
 }
 
-let tax_id = ""
-verifiedTIN(tax_id)
-module.exports = verifiedTIN 
+module.exports = verifiedTIN(tax_id)
