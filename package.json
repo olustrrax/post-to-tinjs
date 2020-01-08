@@ -1,6 +1,6 @@
 {
   "name": "iapp-tinjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "connect to TIN service by using node.js",
   "main": "index.js",
   "dependencies": {
