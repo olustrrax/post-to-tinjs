@@ -1,6 +1,6 @@
 {
   "name": "tin-id",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "connect to TIN service by using node.js",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

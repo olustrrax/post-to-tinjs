@@ -48,18 +48,20 @@ export const CheckTaxID = async (TAXID: string): Promise<string> => {
     httpsAgent,
   };
   return new Promise((resolve, reject) => {
-    getResult(data).then((tax) => {
-      if (tax && tax.MessageErr && tax.MessageErr.length > 0) {
-        resolve(tax.MessageErr[0]);
-      } else if (tax && tax.IsExist && tax.IsExist.length > 0) {
-        resolve(tax.IsExist[0]);
-      } else {
-        resolve(tax);
-      }
-    }).catch(err=> {
-      reject(err)
-    })
-  })
+    getResult(data)
+      .then(tax => {
+        if (tax && tax.MessageErr && tax.MessageErr.length > 0) {
+          resolve(tax.MessageErr[0]);
+        } else if (tax && tax.IsExist && tax.IsExist.length > 0) {
+          resolve(tax.IsExist[0]);
+        } else {
+          resolve(tax);
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };
 
 export const getResult = (data: SetFormatData): Promise<any> => {
@@ -70,11 +72,12 @@ export const getResult = (data: SetFormatData): Promise<any> => {
     headers: data.headers,
     httpsAgent: data.httpsAgent,
   };
-  return axios({ ...config }).then((response: any) => {
-    const result = response.data;
-    return JSON.parse(result.replace(/<[^>]*>/g, ''));
-  })
-  .catch(error => {
-    throw new Error(error);
-  });
+  return axios({ ...config })
+    .then((response: any) => {
+      const result = response.data;
+      return JSON.parse(result.replace(/<[^>]*>/g, ''));
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
 };
