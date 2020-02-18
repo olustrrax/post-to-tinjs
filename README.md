@@ -9,8 +9,8 @@ npm install tin-id
 ```typescript
 import { CheckTaxID } from "tin-id"
 
-let tax = "" //Tax Identification Number
-CheckTaxID(tax)
+const TAXID = "" //Tax Identification Number
+const result = await CheckTaxID(TAXID)
 
 ```
 ## Reference
