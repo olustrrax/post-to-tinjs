@@ -1,6 +1,6 @@
 {
   "name": "tin-id",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "connect to TIN service by using node.js",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "dependencies": {
     "axios": "^0.19.2",
     "https": "^1.0.0"
