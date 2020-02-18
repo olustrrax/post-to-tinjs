@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig } from 'axios'
-import * as https from "https";
+import axios, { AxiosRequestConfig } from 'axios';
+import * as https from 'https';
 
 export interface SetFormatData {
   method?: string;
@@ -9,14 +9,14 @@ export interface SetFormatData {
   httpsAgent: any;
 }
 export interface Header {
-  "Content-Type": string;
-  "Content-Length": string;
+  'Content-Type': string;
+  'Content-Length': string;
   Host: string;
   SOAPAction: string;
 }
 
 export const CheckTaxID = async (TAXID: string): Promise<string> => {
-  TAXID = TAXID.replace(/[^\w\s]/gi, "")
+  TAXID = TAXID.replace(/[^\w\s]/gi, '');
   const headers = {
     'Content-Type': 'text/xml; charset=utf-8',
     'Content-Length': 'length',
@@ -25,7 +25,7 @@ export const CheckTaxID = async (TAXID: string): Promise<string> => {
   };
   const httpsAgent = new https.Agent({
     ciphers: 'AES128-SHA',
-    rejectUnauthorized: false, 
+    rejectUnauthorized: false,
   });
   const xml = `<?xml version="1.0" encoding="utf-8"?>
   <soap:Envelope 
@@ -41,39 +41,40 @@ export const CheckTaxID = async (TAXID: string): Promise<string> => {
     </soap:Body>
   </soap:Envelope>`;
 
-  const data : SetFormatData = {
-    url: "https://rdws.rd.go.th/jsonRD/checktinpinservice.asmx",
+  const data: SetFormatData = {
+    url: 'https://rdws.rd.go.th/jsonRD/checktinpinservice.asmx',
     headers,
     data: xml,
     httpsAgent,
+  };
+  const tax = await getResult(data);
+  if (tax && tax.MessageErr && tax.MessageErr.length > 0) {
+    return tax.MessageErr[0];
+  } else if (tax && tax.IsExist && tax.IsExist.length > 0) {
+    return tax.IsExist[0];
+  } else {
+    return tax;
   }
-  const tax = await getResult(data)
-  if(tax && tax.MessageErr && tax.MessageErr.length > 0){
-    return tax.MessageErr[0]
-  }else if(tax && tax.IsExist && tax.IsExist.length > 0){
-    return tax.IsExist[0]
-  }else{
-    return tax
-  }
-}
+};
 
 export const getResult = (data: SetFormatData): Promise<any> => {
-  const config : AxiosRequestConfig = {
+  const config: AxiosRequestConfig = {
     method: 'post',
     url: data.url,
     data: data.data,
     headers: data.headers,
-    httpsAgent: data.httpsAgent 
-  }
+    httpsAgent: data.httpsAgent,
+  };
   return new Promise((resolve, reject) => {
     axios({
-      ...config
-    }).then((response: any) => {
-        const result = response.data;
-        resolve(JSON.parse(result.replace(/<[^>]*>/g, "")));
+      ...config,
     })
-    .catch(error => {
-      reject(error);
-    });
+      .then((response: any) => {
+        const result = response.data;
+        resolve(JSON.parse(result.replace(/<[^>]*>/g, '')));
+      })
+      .catch(error => {
+        reject(error);
+      });
   });
-}
+};
