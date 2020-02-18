@@ -10,7 +10,7 @@
     "start": "babel-node test.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.2",
     "https": "^1.0.0"
   },
   "devDependencies": {
