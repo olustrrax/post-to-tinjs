@@ -2,7 +2,8 @@
   "name": "tin-id",
   "version": "2.1.2",
   "description": "connect to TIN service by using node.js",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest --config jestconfig.json",
