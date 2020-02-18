@@ -2,11 +2,11 @@
 ServiceTIN สำหรับตรวจสอบเลขประจำตัวผู้เสียภาษีอากร (13 หลัก) ว่าถูกต้องและมีอยู่จริงในฐานข้อมูลหรือไม่
 
 ## Installation
-```
+```bash
 npm install tin-id
 ```
 ## Usage
-```
+```typescript
 import { CheckTaxID } from "tin-id"
 
 let tax = "" //Tax Identification Number
