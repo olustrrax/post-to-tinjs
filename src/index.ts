@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import * as https from "https";
 
 export interface SetFormatData {
-  method: string;
+  method?: string;
   url?: string;
   headers: Header;
   data: string;
@@ -15,8 +15,8 @@ export interface Header {
   SOAPAction: string;
 }
 
-export const CheckTaxID = async (tax_id: string): Promise<string> => {
-  tax_id = tax_id.replace(/[^\w\s]/gi, "")
+export const CheckTaxID = async (TAXID: string): Promise<string> => {
+  TAXID = TAXID.replace(/[^\w\s]/gi, "")
   const headers = {
     'Content-Type': 'text/xml; charset=utf-8',
     'Content-Length': 'length',
@@ -24,7 +24,7 @@ export const CheckTaxID = async (tax_id: string): Promise<string> => {
     SOAPAction: 'https://rdws.rd.go.th/JserviceRD3/checktinpinservice/ServiceTIN',
   };
   const httpsAgent = new https.Agent({
-    ciphers: 'AES128-SHA', //DES-CBC3-SHA
+    ciphers: 'AES128-SHA',
     rejectUnauthorized: false, 
   });
   const xml = `<?xml version="1.0" encoding="utf-8"?>
@@ -36,17 +36,16 @@ export const CheckTaxID = async (tax_id: string): Promise<string> => {
       <ServiceTIN xmlns="https://rdws.rd.go.th/JserviceRD3/checktinpinservice">
         <username>anonymous</username>
         <password>anonymous</password>
-        <TIN>${tax_id}</TIN>
+        <TIN>${TAXID}</TIN>
       </ServiceTIN>
     </soap:Body>
   </soap:Envelope>`;
 
-  let data : SetFormatData = {
-    method: 'post',
+  const data : SetFormatData = {
     url: "https://rdws.rd.go.th/jsonRD/checktinpinservice.asmx",
     headers,
     data: xml,
-    httpsAgent: httpsAgent,
+    httpsAgent,
   }
   const tax = await getResult(data)
   if(tax && tax.MessageErr && tax.MessageErr.length > 0){
@@ -59,11 +58,18 @@ export const CheckTaxID = async (tax_id: string): Promise<string> => {
 }
 
 export const getResult = (data: SetFormatData): Promise<any> => {
+  const config : AxiosRequestConfig = {
+    method: 'post',
+    url: data.url,
+    data: data.data,
+    headers: data.headers,
+    httpsAgent: data.httpsAgent 
+  }
   return new Promise((resolve, reject) => {
     axios({
-      ...data
+      ...config
     }).then((response: any) => {
-        let result = response.data;
+        const result = response.data;
         resolve(JSON.parse(result.replace(/<[^>]*>/g, "")));
     })
     .catch(error => {
